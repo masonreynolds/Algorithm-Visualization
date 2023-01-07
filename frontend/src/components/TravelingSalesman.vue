@@ -20,11 +20,6 @@
       </div>
 
       <div class="column" id="c2">
-          <h3 class="text">Step Speed: {{ stepSpeed }}</h3>
-          <div class="slidecontainer">
-              <input type="range" min="1" max="1000" class="slider" id="myRange" v-model="stepSpeed">
-          </div>
-
           <br />
           <h3 class="text">Max Temperature: {{ maxTemp }}</h3>
           <div class="slidecontainer">
@@ -44,11 +39,16 @@
           </div>
 
           <br />
-          <button type="button" class="btn btn-primary mr-2" :disabled="running" @onclick="switchSteps">Turn On/Off Updates</button>
+          <button type="button" class="btn btn-primary mr-2" :disabled="running" @click="switchSteps">{{ updateText }}</button>
           <br /><br />
 
           <h3 class="text">Locations entered: </h3>
-          <p id="locations" class="text" style="white-space: pre-wrap">None so far</p>
+         <p id="locations" class="text" style="white-space: pre-wrap" v-if="positions.length === 0">None so far</p>
+          <ul v-else>
+              <li class="text" v-for="pose in positions" v-bind:key=pose.ID>
+                  <b>{{ pose.name }}</b>: {{ pose.lat }}, {{ pose.lon }}
+              </li>
+          </ul>
       </div>
     </div>
 </template>
@@ -56,7 +56,6 @@
 <script>
 import * as geoCoder from '../assets/scripts/geocode'
 import * as topojson from 'topojson-client'
-import axios from 'axios'
 import * as d3 from 'd3'
 
 export default {
@@ -71,9 +70,9 @@ export default {
       running: false,
       decrement: 0.999,
       address: '',
-      updatesOn: false,
+      updatesOn: true,
+      updateText: 'Turn Updates Off',
       rendered: false,
-      stepSpeed: 5,
       threshold: 1,
       maxTemp: 10000,
       rand: null,
@@ -89,7 +88,19 @@ export default {
       config: {
         verticalTilt: 0,
         rotation: 90
-      }
+      },
+      connection: null
+    }
+  },
+  created: function () {
+    this.connection = new WebSocket('ws://localhost:18080/Simulated-Annealing-WS')
+
+    this.connection.onmessage = async (event) => {
+      const data = JSON.parse(event.data)
+      this.links = data.links
+      await this.updateGlobe()
+      this.dist = Math.round(data.distance * 100) / 100
+      this.temp = Math.round(data.temperature * 100) / 100
     }
   },
   mounted: async function () {
@@ -282,25 +293,9 @@ export default {
       }
     },
 
-    async updateText () {
-      const locations = document.getElementById('locations')
-      let text = ''
-
-      if (this.positions.length > 0) {
-        for (const pose of this.positions) {
-          text += `${pose.name}: ${pose.lat}, ${pose.lon}\n`
-        }
-
-        locations.innerText = text
-      } else {
-        locations.innerText = 'None So Far'
-      }
-    },
-
     async updateGlobe () {
       this.markerGroup.selectAll('circle').remove()
       this.markerGroup.selectAll('path').remove()
-      this.updateText()
       this.drawMarkers()
       this.drawArcs()
     },
@@ -332,40 +327,25 @@ export default {
     },
 
     async switchSteps () {
+      if (this.updatesOn) {
+        this.updateText = 'Turn Updates On'
+      } else {
+        this.updateText = 'Turn Updates Off'
+      }
+
       this.updatesOn = !this.updatesOn
     },
 
     async runSimAnnealing () {
       this.running = true
-
-      axios.post('http://localhost:18080/Simulated-Annealing', {
+      await this.connection.send(JSON.stringify({
         positions: this.positions,
         temperature: parseInt(this.maxTemp),
         decrement: parseFloat(this.decrement),
-        threshold: parseFloat(this.threshold)
-      })
-        .then(async (response) => {
-          if (this.updatesOn) {
-            // for (var step of solutionSteps)
-            // {
-            //   await this.this.updateGlobe(step.state.positions, step.state.links);
-            //   this.dist = step.state.distance;
-            //   this.temp = Math.Round(step.temp, 2);
-            //   await delay(stepSpeed);
-            // }
-          } else {
-            this.links = response.data.links
-            await this.updateGlobe()
-            this.dist = Math.round(response.data.distance * 100) / 100
-            this.temp = Math.round(response.data.temperature * 100) / 100
-          }
-
-          this.running = false
-          this.invalid = false
-        })
-        .catch(function (error) {
-          console.log(error)
-        })
+        threshold: parseFloat(this.threshold),
+        updatesOn: this.updatesOn
+      }))
+      this.running = false
     }
   }
 }
