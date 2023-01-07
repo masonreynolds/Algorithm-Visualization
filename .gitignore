@@ -21,3 +21,9 @@ frontend/pnpm-debug.log*
 *.njsproj
 *.sln
 *.sw?
+
+
+backend/CMakeFiles/
+backend/CMakeCache.txt
+backend/cmake_install.cmake
+/build
