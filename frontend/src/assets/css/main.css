@@ -32,6 +32,14 @@
     margin: 10px;
 }
 
+div.displayCol {
+    flex: 1;
+    margin: 10px;
+    padding-left: 3em;
+    padding-right: 3em;
+    border-right: 5px solid blue;
+}
+
 #c2 {
     border-left: 5px solid blue;
     padding-left: 20px;

@@ -1,56 +1,55 @@
 <template>
-    <h1 class="text" v-if="dist === 0">Traveling Salesman</h1>
-    <h1 class="text" v-else>Traveling Salesman - {{ dist }} kilometers - Temp: {{ temp }}</h1>
-    <br/>
+  <h1 class="text" v-if="dist === 0">Traveling Salesman</h1>
+  <h1 class="text" v-else>Traveling Salesman - {{ dist }} kilometers - Temp: {{ temp }}</h1>
+  <br/>
 
-    <div class="row">
-      <div class="column">
-          <input type="text" placeholder="Enter address or city" class="textbox" v-model="address" />
-          <br/>
-          <br/>
-          <div class="mt-1">
-              <button type="button" class="btn btn-primary mr-2" @click="handleValidPos" :disabled="running">Add</button>
-              <button type="button" class="btn btn-primary mr-2" @click="clearPoses" :disabled="invalid || running">Clear</button>
-              <button type="button" class="btn btn-primary mr-2" @click="runSimAnnealing" :disabled="invalid || running">Calculate Path</button>
-          </div>
-          <br />
-          <br/>
-
-          <svg id='globe'></svg>
+  <div class="row">
+    <div class="column">
+      <input type="text" placeholder="Enter address or city" class="textbox" v-model="address" />
+      <br/>
+      <br/>
+      <div class="mt-1">
+        <button type="button" class="btn btn-primary mr-2" @click="handleValidPos" :disabled="running">Add</button>
+        <button type="button" class="btn btn-primary mr-2" @click="clearPoses" :disabled="invalid || running">Clear</button>
+        <button type="button" class="btn btn-primary mr-2" @click="runSimAnnealing" :disabled="invalid || running">Calculate Path</button>
       </div>
+      <br />
+      <br/>
 
-      <div class="column" id="c2">
-          <br />
-          <h3 class="text">Max Temperature: {{ maxTemp }}</h3>
-          <div class="slidecontainer">
-              <input type="range" min="1" max="100000" class="slider" id="myRange" v-model="maxTemp" :disabled="running">
-          </div>
-
-          <br />
-          <h3 class="text">Decrement per Step: {{ decrement }}</h3>
-          <div class="slidecontainer">
-              <input type="range" min="0.95" max="0.9999" step="0.0001" class="slider" id="myRange" v-model="decrement" :disabled="running">
-          </div>
-
-          <br />
-          <h3 class="text">Threshold: {{ threshold }}</h3>
-          <div class="slidecontainer">
-              <input type="range" min="1" :max="maxTemp" class="slider" id="myRange" v-model="threshold" :disabled="running">
-          </div>
-
-          <br />
-          <button type="button" class="btn btn-primary mr-2" :disabled="running" @click="switchSteps">{{ updateText }}</button>
-          <br /><br />
-
-          <h3 class="text">Locations entered: </h3>
-         <p id="locations" class="text" style="white-space: pre-wrap" v-if="positions.length === 0">None so far</p>
-          <ul v-else>
-              <li class="text" v-for="pose in positions" v-bind:key=pose.ID>
-                  <b>{{ pose.name }}</b>: {{ pose.lat }}, {{ pose.lon }}
-              </li>
-          </ul>
-      </div>
+      <svg id='globe'></svg>
     </div>
+
+    <div class="column" id="c2">
+      <h3 class="text">Max Temperature: {{ maxTemp }}</h3>
+      <div class="slidecontainer">
+        <input type="range" min="1" max="100000" class="slider" id="myRange" v-model="maxTemp" :disabled="running">
+      </div>
+
+      <br />
+      <h3 class="text">Decrement per Step: {{ decrement }}</h3>
+      <div class="slidecontainer">
+        <input type="range" min="0.95" max="0.9999" step="0.0001" class="slider" id="myRange" v-model="decrement" :disabled="running">
+      </div>
+
+      <br />
+      <h3 class="text">Threshold: {{ threshold }}</h3>
+      <div class="slidecontainer">
+        <input type="range" min="1" :max="maxTemp" class="slider" id="myRange" v-model="threshold" :disabled="running">
+      </div>
+
+      <br />
+      <button type="button" class="btn btn-primary mr-2" :disabled="running" @click="switchSteps">{{ updateText }}</button>
+      <br /><br />
+
+      <h3 class="text">Locations entered: </h3>
+      <p id="locations" class="text" style="white-space: pre-wrap" v-if="positions.length === 0">None so far</p>
+      <span v-else>
+        <p class="text" v-for="pose in positions" v-bind:key=pose.ID>
+          <b>{{ pose.name }}</b>: {{ pose.lat }}, {{ pose.lon }}
+        </p>
+      </span>
+    </div>
+  </div>
 </template>
 
 <script>
