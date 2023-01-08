@@ -6,6 +6,7 @@
         <div>V</div>
       </span>
       <span v-else>Algorithm Visualization</span>
+    <hr/>
     </h1>
 
     <span
@@ -16,6 +17,7 @@
       <i class="fas fa-angle-double-left" />
     </span>
 
+    <br /><br />
     <SidebarLink to="/" icon="fas fa-home">Home</SidebarLink>
     <SidebarLink to="/TravelingSalesman" icon="fas fa-columns">Traveling Salesman</SidebarLink>
   </div>
@@ -61,8 +63,9 @@ export default {
   height: 2.5em;
 }
 .collapse-icon {
-  position: relative;
+  position: absolute;
   text-align: left;
+  top: 8em;
   padding: 0.75em;
   color: rgba(255, 255, 255, 0.7);
   transition: 0.2s linear;

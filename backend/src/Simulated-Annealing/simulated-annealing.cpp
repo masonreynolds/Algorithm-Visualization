@@ -10,10 +10,12 @@ SimulatedAnnealingGraph::SimulatedAnnealingGraph(nlohmann::basic_json<>::value_t
     this->iterations = 0;
 }
 
-std::vector<annealResult*> SimulatedAnnealingGraph::runSimAnneal() {
-    std::vector<annealResult*> results;
+void SimulatedAnnealingGraph::runSimAnneal(crow::websocket::connection& conn, bool updatesOn) {
     Graph* currState = start;
+    annealResult* result;
     Graph* lastState;
+
+    annealResult* minResult = new annealResult(currState, iterations, maxTemp, false);
     double temp = maxTemp;
 
     while (temp >= threshold) {
@@ -30,16 +32,21 @@ std::vector<annealResult*> SimulatedAnnealingGraph::runSimAnneal() {
 
         if (currState != lastState) {
             lastState = currState;
-            annealResult* result = new annealResult();
-            result->iterations = iterations;
-            result->state = currState;
-            result->temp = temp;
-            results.push_back(result);
+            result = new annealResult(currState, iterations, temp, false);
+
+            if (result->state->distance < minResult->state->distance) {
+                minResult = result;
+            }
+
+            if (updatesOn) {
+                conn.send_text(result->dump());
+            }
         }
 
         temp *= decrement;
         iterations++;
     }
 
-    return results;
+    minResult->last = true;
+    conn.send_text(minResult->dump());
 }

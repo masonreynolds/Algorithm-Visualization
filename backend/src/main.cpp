@@ -7,6 +7,7 @@
 #include "../include/simulated-annealing.hpp"
 #include "../include/graph.hpp"
 
+
 using json = nlohmann::json;
 
 int main()
@@ -27,16 +28,8 @@ int main()
                 double(jsonData["threshold"])
             );
 
-            std::vector<SimulatedAnnealing::annealResult*> results = env->runSimAnneal();
-            
-            if (bool(jsonData["updatesOn"])) {
-                for (auto result : results) {
-                    conn.send_text(result->dump());
-                }
-            }
-            else {
-                conn.send_text(results.back()->dump());
-            }
+            int updatesOn = bool(jsonData["updatesOn"]);
+            env->runSimAnneal(conn, updatesOn);
         });
 
     app.port(18080).run();

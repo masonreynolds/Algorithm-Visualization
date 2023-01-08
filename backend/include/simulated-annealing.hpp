@@ -9,14 +9,20 @@
 #include "graph.hpp"
 
 namespace SimulatedAnnealing {
-	struct annealResult : public crow::returnable {
+	struct annealResult {
 		Graph* state;
 		int iterations;
 		double temp;
+		bool last;
 
-		annealResult() : crow::returnable::returnable("application/json") {}
+		annealResult(Graph* state, int iterations, double temp, bool last) {
+            this->state = state;
+            this->iterations = iterations;
+            this->temp = temp;
+            this->last = last;
+		}
 
-		std::string dump() const override {
+		std::string dump() {
 			std::string dump = "";
 
 			dump += "{\n";
@@ -45,7 +51,8 @@ namespace SimulatedAnnealing {
 			dump += "	],\n";
 			dump += "	\"temperature\": " + std::to_string(temp) + ",\n";
 			dump += "	\"iterations\": " + std::to_string(iterations) + ",\n";
-			dump += "	\"distance\": " + std::to_string(state->distance) + "\n";
+			dump += "	\"distance\": " + std::to_string(state->distance) + ",\n";
+			dump += "	\"last\": " + std::to_string(last) + "\n";
 			dump += "}\n";
 
 			return dump;
@@ -62,7 +69,7 @@ namespace SimulatedAnnealing {
 			int iterations;
 
 			SimulatedAnnealingGraph(nlohmann::basic_json<>::value_type& positions, int size, int maxTemp, double decrement, double threshold);
-			std::vector<annealResult*> runSimAnneal();
+			void runSimAnneal(crow::websocket::connection& conn, bool updatesOn);
 	};
 }
 

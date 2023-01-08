@@ -10,8 +10,8 @@
           <br/>
           <div class="mt-1">
               <button type="button" class="btn btn-primary mr-2" @click="handleValidPos" :disabled="running">Add</button>
-              <button type="button" class="btn btn-primary mr-2" @click="clearPoses" :disabled="invalid">Clear</button>
-              <button type="button" class="btn btn-primary mr-2" @click="runSimAnnealing" :disabled="invalid">Calculate Path</button>
+              <button type="button" class="btn btn-primary mr-2" @click="clearPoses" :disabled="invalid || running">Clear</button>
+              <button type="button" class="btn btn-primary mr-2" @click="runSimAnnealing" :disabled="invalid || running">Calculate Path</button>
           </div>
           <br />
           <br/>
@@ -23,19 +23,19 @@
           <br />
           <h3 class="text">Max Temperature: {{ maxTemp }}</h3>
           <div class="slidecontainer">
-              <input type="range" min="1" max="100000" class="slider" id="myRange" v-model="maxTemp">
+              <input type="range" min="1" max="100000" class="slider" id="myRange" v-model="maxTemp" :disabled="running">
           </div>
 
           <br />
           <h3 class="text">Decrement per Step: {{ decrement }}</h3>
           <div class="slidecontainer">
-              <input type="range" min="0.0001" max="0.9999" step="0.0001" class="slider" id="myRange" v-model="decrement">
+              <input type="range" min="0.95" max="0.9999" step="0.0001" class="slider" id="myRange" v-model="decrement" :disabled="running">
           </div>
 
           <br />
           <h3 class="text">Threshold: {{ threshold }}</h3>
           <div class="slidecontainer">
-              <input type="range" min="1" :max="maxTemp" class="slider" id="myRange" v-model="threshold">
+              <input type="range" min="1" :max="maxTemp" class="slider" id="myRange" v-model="threshold" :disabled="running">
           </div>
 
           <br />
@@ -78,6 +78,8 @@ export default {
       rand: null,
       temp: null,
       timer: null,
+      socketTimer: null,
+      time: 2,
       projection: null,
       dist: 0,
       count: 0,
@@ -101,6 +103,11 @@ export default {
       await this.updateGlobe()
       this.dist = Math.round(data.distance * 100) / 100
       this.temp = Math.round(data.temperature * 100) / 100
+
+      if (data.last) {
+        this.running = false
+        this.invalid = false
+      }
     }
   },
   mounted: async function () {
@@ -151,6 +158,7 @@ export default {
             name: 'Custom Location ' + (++this.count)
           })
 
+          this.links = []
           this.invalid = this.positions.Count < 3
           this.updateGlobe()
         }
@@ -338,14 +346,13 @@ export default {
 
     async runSimAnnealing () {
       this.running = true
-      await this.connection.send(JSON.stringify({
+      this.connection.send(JSON.stringify({
         positions: this.positions,
         temperature: parseInt(this.maxTemp),
         decrement: parseFloat(this.decrement),
         threshold: parseFloat(this.threshold),
         updatesOn: this.updatesOn
       }))
-      this.running = false
     }
   }
 }
