@@ -1,4 +1,3 @@
-
 export async function getCoords (address) {
   const coords = {
     lat: 0,
