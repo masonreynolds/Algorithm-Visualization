@@ -129,6 +129,54 @@ main/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/build
 .PHONY : main/fast
 
+src/Minimax/checkers.o: src/Minimax/checkers.cpp.o
+.PHONY : src/Minimax/checkers.o
+
+# target to build an object file
+src/Minimax/checkers.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/Minimax/checkers.cpp.o
+.PHONY : src/Minimax/checkers.cpp.o
+
+src/Minimax/checkers.i: src/Minimax/checkers.cpp.i
+.PHONY : src/Minimax/checkers.i
+
+# target to preprocess a source file
+src/Minimax/checkers.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/Minimax/checkers.cpp.i
+.PHONY : src/Minimax/checkers.cpp.i
+
+src/Minimax/checkers.s: src/Minimax/checkers.cpp.s
+.PHONY : src/Minimax/checkers.s
+
+# target to generate assembly for a file
+src/Minimax/checkers.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/Minimax/checkers.cpp.s
+.PHONY : src/Minimax/checkers.cpp.s
+
+src/Minimax/minimax.o: src/Minimax/minimax.cpp.o
+.PHONY : src/Minimax/minimax.o
+
+# target to build an object file
+src/Minimax/minimax.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/Minimax/minimax.cpp.o
+.PHONY : src/Minimax/minimax.cpp.o
+
+src/Minimax/minimax.i: src/Minimax/minimax.cpp.i
+.PHONY : src/Minimax/minimax.i
+
+# target to preprocess a source file
+src/Minimax/minimax.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/Minimax/minimax.cpp.i
+.PHONY : src/Minimax/minimax.cpp.i
+
+src/Minimax/minimax.s: src/Minimax/minimax.cpp.s
+.PHONY : src/Minimax/minimax.s
+
+# target to generate assembly for a file
+src/Minimax/minimax.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/Minimax/minimax.cpp.s
+.PHONY : src/Minimax/minimax.cpp.s
+
 src/Simulated-Annealing/graph.o: src/Simulated-Annealing/graph.cpp.o
 .PHONY : src/Simulated-Annealing/graph.o
 
@@ -258,6 +306,12 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... main"
+	@echo "... src/Minimax/checkers.o"
+	@echo "... src/Minimax/checkers.i"
+	@echo "... src/Minimax/checkers.s"
+	@echo "... src/Minimax/minimax.o"
+	@echo "... src/Minimax/minimax.i"
+	@echo "... src/Minimax/minimax.s"
 	@echo "... src/Simulated-Annealing/graph.o"
 	@echo "... src/Simulated-Annealing/graph.i"
 	@echo "... src/Simulated-Annealing/graph.s"

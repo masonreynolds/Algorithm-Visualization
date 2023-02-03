@@ -5,7 +5,8 @@
 #include "crow/middlewares/cookie_parser.h"
 #include "crow/middlewares/cors.h"
 #include "../include/simulated-annealing.hpp"
-#include "../include/graph.hpp"
+#include "../include/checkers.hpp"
+#include "../include/minimax.hpp"
 
 
 using json = nlohmann::json;
@@ -31,6 +32,25 @@ int main()
             int updatesOn = bool(jsonData["updatesOn"]);
             env->runSimAnneal(conn, updatesOn);
         });
+
+
+    CROW_ROUTE(app, "/Checkers-Minimax").methods("POST"_method)
+    ([&](const crow::request& req) {
+        json request = json::parse(req.body);
+        
+        Checkers::CheckerBoard* board = new Checkers::CheckerBoard(
+            request["board"]["redPoses"],
+            request["board"]["blackPoses"],
+            request["board"]["redKings"],
+            request["board"]["blackKings"]
+        );
+
+        Checkers::Minimax* minimax = new Checkers::Minimax(board);
+        Checkers::minimaxResult* result = minimax->setupMinimax(int(request["depth"]));
+
+        return result->dump();
+    });
+
 
     app.port(18080).run();
 }

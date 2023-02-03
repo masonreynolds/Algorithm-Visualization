@@ -1,6 +1,9 @@
 <template>
   <h1 class="text" v-if="states === 0">Minimax Checkers AI</h1>
   <h1 class="text" v-else>Minimax Checkers AI - {{ states }} States Generated</h1>
+  <h1 class="text" v-if="currentHeuristic === 100">The AI has WON</h1>
+  <h1 class="text" v-else-if="currentHeuristic === -100">You have WON</h1>
+  <h1 class="text" v-else-if="heuristic === 100">The AI has already WON</h1>
   <br />
 
   <div class="row">
@@ -10,7 +13,7 @@
     <div class="column">
       <h3 class="text">Number of Future Moves to Generate: {{ depth }}</h3>
       <div class="slidecontainer">
-        <input type="range" min="1" max="5" class="slider" id="myRange" v-model="depth">
+        <input type="range" min="1" max="7" class="slider" id="myRange" v-model="depth">
       </div>
       <br />
       <button type="button" class="btn btn-primary mr-2" @click="runMinimax">Submit Move</button>
@@ -21,7 +24,7 @@
       <p id="locations" class="text" style="white-space: pre-wrap" v-if="boards.length === 1">None so far</p>
       <span v-else>
         <p class="text" v-for="board in boards" v-bind:key=board.move>
-          <b>{{ board.move }}</b>
+          <b v-if="board.move.length > 0">{{ board.move }}</b>
         </p>
       </span>
     </div>
@@ -29,15 +32,19 @@
 </template>
 
 <script>
+import axios from 'axios'
 import * as d3 from 'd3'
 
 export default {
   name: 'CheckersAI',
   data () {
     return {
-      xAxis: { 0: 'H', 1: 'G', 2: 'G', 3: 'E', 4: 'D', 5: 'C', 6: 'B', 7: 'A' },
+      xAxis: ['H', 'G', 'F', 'E', 'D', 'C', 'B', 'A'],
       boards: [],
       fieldSize: 90,
+      currentHeuristic: 0,
+      running: false,
+      heuristic: 0,
       svg: null,
       states: 0,
       depth: 3
@@ -186,7 +193,7 @@ export default {
             b.redPoses = b.redPoses.filter(b => b[0] !== pose[0] || b[1] !== pose[1])
             d3.event.target.remove()
 
-            b.move = `Black: took red at ${this.xAxis[pose[0]]}${pose[1] + 1}`
+            b.move = ''
             this.boards.push(b)
             this.updateCheckers()
           }
@@ -248,7 +255,7 @@ export default {
             b.redKings = b.redKings.filter(b => b[0] !== pose[0] || b[1] !== pose[1])
             d3.event.target.remove()
 
-            b.move = `Red: took black at ${this.xAxis[pose[0]]}${pose[1] + 1}`
+            b.move = ''
             this.boards.push(b)
             this.updateCheckers()
           }
@@ -317,7 +324,7 @@ export default {
             b.blackPoses = b.blackPoses.filter(b => b[0] !== pose[0] || b[1] !== pose[1])
             d3.event.target.remove()
 
-            b.move = `Black: took red at ${this.xAxis[pose[0]]}${pose[1] + 1}`
+            b.move = ''
             this.boards.push(b)
             this.updateCheckers()
           }
@@ -379,7 +386,7 @@ export default {
             b.blackKings = b.blackKings.filter(b => b[0] !== pose[0] || b[1] !== pose[1])
             d3.event.target.remove()
 
-            b.move = `Red: took black at ${this.xAxis[pose[0]]}${pose[1] + 1}`
+            b.move = ''
             this.boards.push(b)
             this.updateCheckers()
           }
@@ -409,13 +416,35 @@ export default {
       this.states = 0
     },
 
-    runMinimax: async () => {
-      // const result = Minimax.startMinimax(boards[this.boards.length - 1], depth)
-      // this.boards.Add(result.board)
-      // this.states = result.states
-      // this.StateHasChanged()
+    async runMinimax () {
+      this.running = true
 
-      // await JSRuntime.InvokeVoidAsync('updateCheckers', boards[this.boards.length - 1])
+      axios.post('http://localhost:18080/Checkers-Minimax', {
+        board: this.boards[this.boards.length - 1],
+        depth: parseInt(this.depth)
+      })
+        .then(async (response) => {
+          const data = response.data
+
+          const b = {
+            blackPoses: data.blackPoses,
+            blackKings: data.blackKings,
+            redPoses: data.redPoses,
+            redKings: data.redKings,
+            move: data.move
+          }
+
+          this.states = data.states
+          this.heuristic = data.heuristic
+          this.currentHeuristic = data.currentHeuristic
+          this.boards.push(b)
+          await this.updateCheckers()
+
+          this.running = false
+        })
+        .catch(function (error) {
+          console.log(error)
+        })
     }
   }
 }
