@@ -119,7 +119,7 @@ export default {
         .style('stroke', 'black')
 
       this.svg.on('contextmenu', function () {
-        d3.event.preventDefault()
+        event.preventDefault()
       })
     },
 
@@ -148,15 +148,15 @@ export default {
         .attr('x', d => (((d[1] + 1) * this.fieldSize) - (this.fieldSize / 2)) + 'px')
         .attr('width', (this.fieldSize / 2 - 10) + 'px')
         .attr('height', (this.fieldSize / 2 - 10) + 'px')
-        .on('mousedown', (pose) => {
-          if (d3.event.button === 0) {
-            d3.event.target.onmousemove = function (event) {
+        .on('mousedown', (event, pose) => {
+          if (event.button === 0) {
+            event.target.onmousemove = function (event) {
               const CTM = event.target.getScreenCTM()
               event.target.setAttributeNS(null, 'cx', (event.clientX - CTM.e) / CTM.a)
               event.target.setAttributeNS(null, 'cy', (event.clientY - CTM.f) / CTM.d)
             }
 
-            d3.event.target.onmouseup = (event) => {
+            event.target.onmouseup = (event) => {
               const newPose = [0, 0]
               const CTM = event.target.getScreenCTM()
               newPose[0] = Math.round(((event.clientY - CTM.f) / CTM.d - this.fieldSize / 2) / (this.fieldSize))
@@ -188,10 +188,10 @@ export default {
               this.updateCheckers()
               this.onmousemove = null
             }
-          } else if (d3.event.button === 2) {
-            d3.event.preventDefault()
+          } else if (event.button === 2) {
+            event.preventDefault()
             b.redPoses = b.redPoses.filter(b => b[0] !== pose[0] || b[1] !== pose[1])
-            d3.event.target.remove()
+            event.target.remove()
 
             b.move = ''
             this.boards.push(b)
@@ -217,15 +217,15 @@ export default {
         .attr('x', d => (((d[1] + 1) * this.fieldSize) - (this.fieldSize / 2)) + 'px')
         .attr('width', (this.fieldSize / 2 - 10) + 'px')
         .attr('height', (this.fieldSize / 2 - 10) + 'px')
-        .on('mousedown', (pose) => {
-          if (d3.event.button === 0) {
-            d3.event.target.onmousemove = function (event) {
+        .on('mousedown', (event, pose) => {
+          if (event.button === 0) {
+            event.target.onmousemove = function (event) {
               const CTM = event.target.getScreenCTM()
               event.target.setAttributeNS(null, 'cx', (event.clientX - CTM.e) / CTM.a)
               event.target.setAttributeNS(null, 'cy', (event.clientY - CTM.f) / CTM.d)
             }
 
-            d3.event.target.onmouseup = (event) => {
+            event.target.onmouseup = (event) => {
               const newPose = [0, 0]
               const CTM = event.target.getScreenCTM()
               newPose[0] = Math.round(((event.clientY - CTM.f) / CTM.d - this.fieldSize / 2) / (this.fieldSize))
@@ -250,10 +250,10 @@ export default {
               this.updateCheckers()
               this.onmousemove = null
             }
-          } else if (d3.event.button === 2) {
-            d3.event.preventDefault()
+          } else if (event.button === 2) {
+            event.preventDefault()
             b.redKings = b.redKings.filter(b => b[0] !== pose[0] || b[1] !== pose[1])
-            d3.event.target.remove()
+            event.target.remove()
 
             b.move = ''
             this.boards.push(b)
@@ -279,15 +279,15 @@ export default {
         .attr('x', d => (((d[1] + 1) * this.fieldSize) - (this.fieldSize / 2)) + 'px')
         .attr('width', (this.fieldSize / 2 - 10) + 'px')
         .attr('height', (this.fieldSize / 2 - 10) + 'px')
-        .on('mousedown', (pose) => {
-          if (d3.event.button === 0) {
-            d3.event.target.onmousemove = function (event) {
+        .on('mousedown', (event, pose) => {
+          if (event.button === 0) {
+            event.target.onmousemove = function (event) {
               const CTM = event.target.getScreenCTM()
               event.target.setAttributeNS(null, 'cx', (event.clientX - CTM.e) / CTM.a)
               event.target.setAttributeNS(null, 'cy', (event.clientY - CTM.f) / CTM.d)
             }
 
-            d3.event.target.onmouseup = (event) => {
+            event.target.onmouseup = (event) => {
               const newPose = [0, 0]
               const CTM = event.target.getScreenCTM()
               newPose[0] = Math.round(((event.clientY - CTM.f) / CTM.d - this.fieldSize / 2) / (this.fieldSize))
@@ -319,10 +319,10 @@ export default {
               this.updateCheckers()
               this.onmousemove = null
             }
-          } else if (d3.event.button === 2) {
-            d3.event.preventDefault()
+          } else if (event.button === 2) {
+            event.preventDefault()
             b.blackPoses = b.blackPoses.filter(b => b[0] !== pose[0] || b[1] !== pose[1])
-            d3.event.target.remove()
+            event.target.remove()
 
             b.move = ''
             this.boards.push(b)
@@ -348,15 +348,15 @@ export default {
         .attr('x', d => (((d[1] + 1) * this.fieldSize) - (this.fieldSize / 2)) + 'px')
         .attr('width', (this.fieldSize / 2 - 10) + 'px')
         .attr('height', (this.fieldSize / 2 - 10) + 'px')
-        .on('mousedown', (pose) => {
-          if (d3.event.button === 0) {
-            d3.event.target.onmousemove = function (event) {
+        .on('mousedown', (event, pose) => {
+          if (event.button === 0) {
+            event.target.onmousemove = function (event) {
               const CTM = event.target.getScreenCTM()
               event.target.setAttributeNS(null, 'cx', (event.clientX - CTM.e) / CTM.a)
               event.target.setAttributeNS(null, 'cy', (event.clientY - CTM.f) / CTM.d)
             }
 
-            d3.event.target.onmouseup = (event) => {
+            event.target.onmouseup = (event) => {
               const newPose = [0, 0]
               const CTM = event.target.getScreenCTM()
               newPose[0] = Math.round(((event.clientY - CTM.f) / CTM.d - this.fieldSize / 2) / (this.fieldSize))
@@ -381,10 +381,10 @@ export default {
               this.updateCheckers()
               this.onmousemove = null
             }
-          } else if (d3.event.button === 2) {
-            d3.event.preventDefault()
+          } else if (event.button === 2) {
+            event.preventDefault()
             b.blackKings = b.blackKings.filter(b => b[0] !== pose[0] || b[1] !== pose[1])
-            d3.event.target.remove()
+            event.target.remove()
 
             b.move = ''
             this.boards.push(b)

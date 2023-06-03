@@ -203,23 +203,16 @@ export default {
     },
 
     async drawGlobe () {
-      d3.queue()
-        .defer(d3.json, 'https://gist.githubusercontent.com/mbostock/4090846/raw/d534aba169207548a8a3d670c9c2cc719ff05c47/world-110m.json')
-        .await((error, worldData) => {
-          if (error) {
-            console.log(error)
-          } else {
-            this.svg.selectAll('.segment')
-              .data(topojson.feature(worldData, worldData.objects.countries).features)
-              .enter().append('path')
-              .attr('class', 'segment')
-              .attr('d', this.path)
-              .style('stroke', 'white')
-              .style('stroke-width', '1px')
-              .style('fill', '#222222')
-              .style('opacity', '0.75')
-          }
-        })
+      const response = await d3.json('https://gist.githubusercontent.com/mbostock/4090846/raw/d534aba169207548a8a3d670c9c2cc719ff05c47/world-110m.json')
+      this.svg.selectAll('.segment')
+        .data(topojson.feature(response, response.objects.countries).features)
+        .enter().append('path')
+        .attr('class', 'segment')
+        .attr('d', this.path)
+        .style('stroke', 'white')
+        .style('stroke-width', '1px')
+        .style('fill', '#222222')
+        .style('opacity', '0.75')
     },
 
     async drawGraticule () {
@@ -243,10 +236,10 @@ export default {
       markers
         .enter()
         .append('circle')
-        .on('mousedown', (pose) => {
-          d3.event.stopPropagation()
+        .on('mousedown', (event, pose) => {
+          event.stopPropagation()
 
-          if (d3.event.button === 0) {
+          if (event.button === 0) {
             document.getElementById('globe').onmousemove = (event) => {
               const m = document.getElementById('globe').getScreenCTM()
               let p = document.getElementById('globe').createSVGPoint()
@@ -259,7 +252,7 @@ export default {
               this.links = []
               this.updateGlobe()
             }
-          } else if (d3.event.button === 2) {
+          } else if (event.button === 2) {
             this.links = []
             this.positions = this.positions.filter(p => p.lat !== pose.lat && p.lon !== pose.lon)
             event.srcElement.remove()

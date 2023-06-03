@@ -5,7 +5,7 @@
 #include <nlohmann/json.hpp> // nlohmann-json3-dev
 #include <vector>
 #include <string>
-#include "crow.h" // crow
+#include "crow_all.h" // crow
 #include "graph.hpp"
 
 namespace SimulatedAnnealing {

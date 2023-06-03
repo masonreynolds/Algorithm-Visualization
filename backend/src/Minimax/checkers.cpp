@@ -105,8 +105,6 @@ int CheckerBoard::getConflictingPieces() {
 
 std::vector<CheckerBoard*> CheckerBoard::generateNeighbors() {
     std::vector<CheckerBoard*> neighbors;
-
-    // std::cout << "Generating Neighbors" << std::endl;
     std::vector<CheckerBoard*> poseNeighbors = generatePoseNeighbors();
     neighbors.insert(neighbors.end(), poseNeighbors.begin(), poseNeighbors.end());
 
@@ -122,7 +120,6 @@ std::vector<CheckerBoard*> CheckerBoard::generatePoseNeighbors() {
 
     if (redTurn) {
         for (int i = 0; i < redPoses.size(); i++) {
-            // std::cout << "Finding moves for piece at " << redPoses[i] << std::endl;
             std::vector<CheckerBoard*> pieceNeighbors = generatePieceMoves(redPoses[i]);
             neighbors.insert(neighbors.end(), pieceNeighbors.begin(), pieceNeighbors.end());
 
@@ -132,7 +129,6 @@ std::vector<CheckerBoard*> CheckerBoard::generatePoseNeighbors() {
     }
     else {
         for (int i = 0; i < blackPoses.size(); i++) {
-            // std::cout << "Finding moves for piece at " << blackPoses[i] << std::endl;
             std::vector<CheckerBoard*> pieceNeighbors = generatePieceMoves(blackPoses[i]);
             neighbors.insert(neighbors.end(), pieceNeighbors.begin(), pieceNeighbors.end());
 
@@ -150,7 +146,6 @@ std::vector<CheckerBoard*> CheckerBoard::generateKingPoseNeighbors() {
 
     if (redTurn) {
         for (int i = 0; i < redKingPoses.size(); i++) {
-            // std::cout << "Finding moves for piece at " << redKingPoses[i] << std::endl;
             std::vector<CheckerBoard*> pieceNeighbors = generateKingPieceMoves(redKingPoses[i]);
             neighbors.insert(neighbors.end(), pieceNeighbors.begin(), pieceNeighbors.end());
 
@@ -160,7 +155,6 @@ std::vector<CheckerBoard*> CheckerBoard::generateKingPoseNeighbors() {
     }
     else {
         for (int i = 0; i < blackKingPoses.size(); i++) {
-            // std::cout << "Finding moves for piece at " << blackKingPoses[i] << std::endl;
             std::vector<CheckerBoard*> pieceNeighbors = generateKingPieceMoves(blackKingPoses[i]);
             neighbors.insert(neighbors.end(), pieceNeighbors.begin(), pieceNeighbors.end());
 
@@ -201,7 +195,6 @@ std::vector<CheckerBoard*> CheckerBoard::generatePieceMoves(int piece) {
     }
 
     for (int i = 0; i < poses.size(); i++) {
-        // std::cout << "Checking for piece at " << poses[i] << std::endl;
         bool* check = isPieceAtPose(poses[i]);
 
         if (!(*check)) {
@@ -245,7 +238,6 @@ std::vector<CheckerBoard*> CheckerBoard::generatePieceJumps(int piece) {
     }
 
     for (int i = 0; i < poses.size(); i++) {
-        // std::cout << "Checking for piece at " << poses[i] << std::endl;
         bool* check = isPieceAtPose(poses[i]);
 
         if ((*check) && *(check + 1)) {
@@ -294,7 +286,6 @@ std::vector<CheckerBoard*> CheckerBoard::generateKingPieceMoves(int piece) {
     }
 
     for (int i = 0; i < poses.size(); i++) {
-        // std::cout << "Checking for piece at " << poses[i] << std::endl;
         bool* check = isPieceAtPose(poses[i]);
 
         if (!(*check)) {
@@ -334,7 +325,6 @@ std::vector<CheckerBoard*> CheckerBoard::generateKingPieceJumps(int piece) {
     }
 
     for (int i = 0; i < poses.size(); i++) {
-        // std::cout << "Checking for piece at " << poses[i] << std::endl;
         bool* check = isPieceAtPose(poses[i]);
 
         if ((*check) && *(check + 1)) {

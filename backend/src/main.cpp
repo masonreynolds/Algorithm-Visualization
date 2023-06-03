@@ -1,10 +1,9 @@
 #include <nlohmann/json.hpp> // nlohmann-json3-dev
 #include <iostream>
 
-#include "crow.h" // crow
-#include "crow/middlewares/cookie_parser.h"
-#include "crow/middlewares/cors.h"
+#include "../include/crow_all.h" // crow
 #include "../include/simulated-annealing.hpp"
+#include "../include/policy-learning.hpp"
 #include "../include/checkers.hpp"
 #include "../include/minimax.hpp"
 
@@ -33,8 +32,21 @@ int main()
             env->runSimAnneal(conn, updatesOn);
         });
 
+    
+    CROW_ROUTE(app, "/Path-Finder-WS")
+        .websocket()
+        .onmessage([&](crow::websocket::connection& conn, const std::string& data, bool is_binary){
+            json jsonData = json::parse(data);
 
-    CROW_ROUTE(app, "/Checkers-Minimax").methods("POST"_method)
+            PolicyLearning::PolicyLearningEnvironment* env = new PolicyLearning::PolicyLearningEnvironment(
+                jsonData["environment"]
+            );
+
+            env->runPolicyLearning(conn);
+        });
+
+
+    CROW_ROUTE(app, "/Checkers-Minimax").methods(crow::HTTPMethod::POST)
     ([&](const crow::request& req) {
         json request = json::parse(req.body);
         
@@ -52,5 +64,5 @@ int main()
     });
 
 
-    app.port(18080).run();
+    app.port(18080).multithreaded().run();
 }

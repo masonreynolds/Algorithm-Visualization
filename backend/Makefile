@@ -57,10 +57,10 @@ RM = /usr/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/mreynolds/home/Projects/Algorithm-Visualization/backend
+CMAKE_SOURCE_DIR = /home/mreynolds/projects/Algorithm-Visualization/backend
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/mreynolds/home/Projects/Algorithm-Visualization/backend
+CMAKE_BINARY_DIR = /home/mreynolds/projects/Algorithm-Visualization/backend
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -87,9 +87,9 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/mreynolds/home/Projects/Algorithm-Visualization/backend/CMakeFiles /home/mreynolds/home/Projects/Algorithm-Visualization/backend//CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/mreynolds/projects/Algorithm-Visualization/backend/CMakeFiles /home/mreynolds/projects/Algorithm-Visualization/backend//CMakeFiles/progress.marks
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/mreynolds/home/Projects/Algorithm-Visualization/backend/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/mreynolds/projects/Algorithm-Visualization/backend/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -176,6 +176,30 @@ src/Minimax/minimax.s: src/Minimax/minimax.cpp.s
 src/Minimax/minimax.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/Minimax/minimax.cpp.s
 .PHONY : src/Minimax/minimax.cpp.s
+
+src/Policy-Learning/policy-learning.o: src/Policy-Learning/policy-learning.cpp.o
+.PHONY : src/Policy-Learning/policy-learning.o
+
+# target to build an object file
+src/Policy-Learning/policy-learning.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/Policy-Learning/policy-learning.cpp.o
+.PHONY : src/Policy-Learning/policy-learning.cpp.o
+
+src/Policy-Learning/policy-learning.i: src/Policy-Learning/policy-learning.cpp.i
+.PHONY : src/Policy-Learning/policy-learning.i
+
+# target to preprocess a source file
+src/Policy-Learning/policy-learning.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/Policy-Learning/policy-learning.cpp.i
+.PHONY : src/Policy-Learning/policy-learning.cpp.i
+
+src/Policy-Learning/policy-learning.s: src/Policy-Learning/policy-learning.cpp.s
+.PHONY : src/Policy-Learning/policy-learning.s
+
+# target to generate assembly for a file
+src/Policy-Learning/policy-learning.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/Policy-Learning/policy-learning.cpp.s
+.PHONY : src/Policy-Learning/policy-learning.cpp.s
 
 src/Simulated-Annealing/graph.o: src/Simulated-Annealing/graph.cpp.o
 .PHONY : src/Simulated-Annealing/graph.o
@@ -312,6 +336,9 @@ help:
 	@echo "... src/Minimax/minimax.o"
 	@echo "... src/Minimax/minimax.i"
 	@echo "... src/Minimax/minimax.s"
+	@echo "... src/Policy-Learning/policy-learning.o"
+	@echo "... src/Policy-Learning/policy-learning.i"
+	@echo "... src/Policy-Learning/policy-learning.s"
 	@echo "... src/Simulated-Annealing/graph.o"
 	@echo "... src/Simulated-Annealing/graph.i"
 	@echo "... src/Simulated-Annealing/graph.s"

@@ -21,6 +21,7 @@
     <SidebarLink to="/" icon="fas fa-home">Home</SidebarLink>
     <SidebarLink to="/TravelingSalesman" icon="fas fa-columns">Traveling Salesman</SidebarLink>
     <SidebarLink to="/Checkers" icon="fas fa-columns">Checkers</SidebarLink>
+    <SidebarLink to="/PathFinder" icon="fas fa-columns">PathFinder</SidebarLink>
   </div>
 </template>
 
